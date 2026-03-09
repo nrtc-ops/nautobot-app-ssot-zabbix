@@ -55,8 +55,8 @@ toml = "*"
 pymarkdownlnt = "~0.9.30"
 Markdown = "*"
 towncrier = ">=23.6.0,<=24.8.0"
-to-json-schema = "*"
-jsonschema = "*"
+to-json-schema = ">=1.0.1"
+jsonschema = ">=4.26.0"
 
 [tool.poetry.group.docs.dependencies]
 # Render custom markdown for version added/changed/remove notes
