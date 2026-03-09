@@ -1,0 +1,33 @@
+{
+    "cookiecutter": {
+        "codeowner_github_usernames": "@nrtc-ops",
+        "full_name": "NRTC",
+        "email": "noc@nrtc.coop",
+        "github_org": "nrtc-ops",
+        "system_of_record": "Zabbix",
+        "system_of_record_camel": "Zabbix",
+        "system_of_record_slug": "zabbix",
+        "model_class_name": "None",
+        "direction_of_sync": "To Nautobot",
+        "app_name": "nautobot_ssot_zabbix",
+        "verbose_name": "SSoT Zabbix",
+        "app_slug": "nautobot-ssot-zabbix",
+        "project_slug": "nautobot-app-ssot-zabbix",
+        "repo_url": "https://github.com/nrtc-ops/nautobot-app-ssot-zabbix",
+        "base_url": "ssot-zabbix",
+        "camel_name": "NautobotSsotZabbix",
+        "project_short_description": "Nautobot SSoT integration for Zabbix monitoring synchronization",
+        "open_source_license": "Not open source",
+        "docs_base_url": "https://docs.nautobot.com",
+        "docs_app_url": "https://docs.nautobot.com/projects/ssot-zabbix/en/latest",
+        "_extensions": [
+            "local_extensions.camel_case_to_kebab",
+            "local_extensions.camel_case_to_words",
+            "local_extensions.NautobotVersions"
+        ],
+        "_template": "https://github.com/nautobot/cookiecutter-nautobot-app",
+        "_output_dir": "/tmp/cookie-out",
+        "_repo_dir": "/root/.cookiecutters/cookiecutter-nautobot-app/nautobot-app-ssot",
+        "_checkout": null
+    }
+}
