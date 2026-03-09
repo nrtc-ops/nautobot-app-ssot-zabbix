@@ -232,19 +232,23 @@ class ZabbixClient:
                 f"Failed to delete Zabbix host '{hostname}' (id={hostid}): {exc}"
             ) from exc
 
-    def get_all_nautobot_hosts(self) -> list:
-        """Return all Zabbix hosts that were created/managed by Nautobot.
+    def get_all_hosts(self, managed_only: bool = False) -> list:
+        """Return hosts from Zabbix.
 
-        Filters by tag source=nautobot so we only touch what we own.
+        Args:
+            managed_only: If True, only return hosts tagged source=nautobot.
+                          If False (default), return all hosts.
         """
-        return self.api.host.get(
-            output=["hostid", "host", "name", "status", "description"],
-            selectInterfaces=["interfaceid", "type", "ip", "dns", "useip", "port", "main"],
-            selectGroups=["groupid", "name"],
-            selectParentTemplates=["templateid", "name"],
-            selectTags=["tag", "value"],
-            tags=[{"tag": "source", "value": "nautobot", "operator": 0}],
-        )
+        params = {
+            "output": ["hostid", "host", "name", "status", "description"],
+            "selectInterfaces": ["interfaceid", "type", "ip", "dns", "useip", "port", "main"],
+            "selectGroups": ["groupid", "name"],
+            "selectParentTemplates": ["templateid", "name"],
+            "selectTags": ["tag", "value"],
+        }
+        if managed_only:
+            params["tags"] = [{"tag": "source", "value": "nautobot", "operator": 0}]
+        return self.api.host.get(**params)
 
 
 def get_zabbix_client_from_config() -> ZabbixClient:

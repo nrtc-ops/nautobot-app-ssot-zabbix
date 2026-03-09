@@ -35,28 +35,31 @@ class ZabbixRemoteAdapter(Adapter):
     host = ZabbixHost
     top_level = ["host"]
 
-    def __init__(self, *args, job=None, sync=None, **kwargs):
+    def __init__(self, *args, job=None, sync=None, managed_only=False, **kwargs):
         """Initialize the Zabbix remote adapter.
 
         Args:
             job: The running SSoT Job instance (provides self.job.logger)
             sync: The SSoT Sync model instance
+            managed_only: If True, only load hosts tagged source=nautobot.
+                          If False (default), load all Zabbix hosts.
         """
         super().__init__(*args, **kwargs)
         self.job = job
         self.sync = sync
+        self.managed_only = managed_only
 
     def load(self):
-        """Load Nautobot-managed hosts from Zabbix into DiffSync models.
+        """Load hosts from Zabbix into DiffSync models.
 
-        Only loads hosts tagged with source=nautobot to ensure we don't
-        accidentally manage hosts that were created outside of this integration.
+        By default loads ALL hosts. When managed_only=True (used by DataTarget),
+        only loads hosts tagged source=nautobot so deletions are scoped correctly.
         """
         client = get_zabbix_client_from_config()
         with client:
-            hosts = client.get_all_nautobot_hosts()
+            hosts = client.get_all_hosts(managed_only=self.managed_only)
 
-        self.job.logger.info("Loading %d Nautobot-managed hosts from Zabbix.", len(hosts))
+        self.job.logger.info("Loading %d hosts from Zabbix (managed_only=%s).", len(hosts), self.managed_only)
 
         for host_data in hosts:
             hostname = host_data["host"]
@@ -79,7 +82,7 @@ class ZabbixRemoteAdapter(Adapter):
             # Extract nautobot_id tag if present
             tags = host_data.get("tags", [])
 
-            zabbix_host = self.type.host(
+            zabbix_host = ZabbixHost(
                 name=hostname,
                 visible_name=host_data.get("name", hostname),
                 ip_address=ip_address,
@@ -114,9 +117,7 @@ class ZabbixNautobotAdapter(NautobotAdapter):
             job: The running SSoT Job instance
             sync: The SSoT Sync model instance
         """
-        super().__init__(*args, **kwargs)
-        self.job = job
-        self.sync = sync
+        super().__init__(*args, job=job, sync=sync, **kwargs)
 
     def load(self):
         """Load active Nautobot devices into DiffSync models.
@@ -127,18 +128,18 @@ class ZabbixNautobotAdapter(NautobotAdapter):
         """
         from nautobot.dcim.models import Device
 
-        active_statuses = {"active", "staged"}
+        active_statuses = {"Active", "Staged"}
 
         qs = (
-            Device.objects.filter(status__slug__in=active_statuses)
+            Device.objects.filter(status__name__in=active_statuses)
             .select_related(
                 "location",
                 "role",
                 "device_type",
                 "tenant",
                 "platform",
-                "primary_ip4__address",
-                "primary_ip6__address",
+                "primary_ip4",
+                "primary_ip6",
                 "status",
             )
         )
@@ -153,7 +154,7 @@ class ZabbixNautobotAdapter(NautobotAdapter):
                 )
                 continue
 
-            nautobot_host = self.type.host(
+            nautobot_host = ZabbixHost(
                 name=device.name,
                 visible_name=str(device),
                 ip_address=ip,

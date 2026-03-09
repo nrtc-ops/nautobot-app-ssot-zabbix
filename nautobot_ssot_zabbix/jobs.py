@@ -124,8 +124,12 @@ class ZabbixDataTarget(DataTarget):
         self.source_adapter.load()
 
     def load_target_adapter(self):
-        """Load hosts from Zabbix into DiffSync models."""
-        self.target_adapter = ZabbixRemoteAdapter(job=self, sync=self.sync)
+        """Load hosts from Zabbix into DiffSync models.
+
+        Uses managed_only=True so deletions are scoped to hosts we created
+        (tagged source=nautobot). Unmanaged Zabbix hosts are left alone.
+        """
+        self.target_adapter = ZabbixRemoteAdapter(job=self, sync=self.sync, managed_only=True)
         self.target_adapter.load()
 
     def run(self, dryrun, memory_profiling, debug, *args, **kwargs):  # pylint: disable=arguments-differ

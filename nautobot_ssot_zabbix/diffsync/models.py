@@ -6,11 +6,18 @@ synchronized in both directions.
 """
 
 import logging
-from typing import ClassVar, List, Optional
+from typing import ClassVar, Optional
 
 from diffsync import DiffSyncModel
 
 logger = logging.getLogger("nautobot.jobs")
+
+
+def _is_zabbix_target(adapter) -> bool:
+    """Return True if the adapter is the Zabbix remote adapter (i.e. we should write to Zabbix)."""
+    from nautobot_ssot_zabbix.diffsync.adapters import ZabbixRemoteAdapter
+
+    return isinstance(adapter, ZabbixRemoteAdapter)
 
 
 class ZabbixHost(DiffSyncModel):
@@ -52,18 +59,25 @@ class ZabbixHost(DiffSyncModel):
     description: str = ""
     zabbix_id: Optional[str] = None  # non-synced metadata, populated from Zabbix side
 
-    def create(self, adapter, ids, attrs):
-        """Create a new host in the target system (Zabbix).
+    @classmethod
+    def create(cls, adapter, ids, attrs):
+        """Create a new host in the target system.
 
-        Called by DiffSync when a host exists in Nautobot but not in Zabbix.
+        Only writes to Zabbix when the target adapter is ZabbixRemoteAdapter
+        (Nautobot -> Zabbix direction). For Zabbix -> Nautobot, just logs the diff.
         """
+        hostname = ids["name"]
+
+        if not _is_zabbix_target(adapter):
+            adapter.job.logger.info("Zabbix->Nautobot: would create Nautobot device '%s' (not yet implemented).", hostname)
+            return super().create(adapter, ids, attrs)
+
         from nautobot_ssot_zabbix.utils.zabbix import get_zabbix_client_from_config
 
-        hostname = ids["name"]
         ip = attrs.get("ip_address")
         if not ip:
             adapter.job.logger.warning("Skipping create for '%s' — no IP address.", hostname)
-            return self
+            return None
 
         client = get_zabbix_client_from_config()
         with client:
@@ -90,13 +104,17 @@ class ZabbixHost(DiffSyncModel):
             result.get("action"),
             result.get("hostid"),
         )
-        return self
+        return super().create(adapter, ids, attrs)
 
     def update(self, attrs):
-        """Update an existing host in Zabbix.
+        """Update an existing host in the target system.
 
-        Called by DiffSync when a host exists in both systems but attributes differ.
+        Only writes to Zabbix when the target adapter is ZabbixRemoteAdapter.
         """
+        if not _is_zabbix_target(self.adapter):
+            self.adapter.job.logger.info("Zabbix->Nautobot: would update Nautobot device '%s' (not yet implemented).", self.name)
+            return super().update(attrs)
+
         from nautobot_ssot_zabbix.utils.zabbix import get_zabbix_client_from_config
 
         hostname = self.name
@@ -136,12 +154,14 @@ class ZabbixHost(DiffSyncModel):
         return super().update(attrs)
 
     def delete(self):
-        """Delete the host from Zabbix.
+        """Delete the host from the target system.
 
-        Called by DiffSync when a host exists in Zabbix but not in Nautobot.
-        Only removes hosts that were tagged source=nautobot (enforced in the
-        ZabbixRemoteAdapter.load() by using get_all_nautobot_hosts()).
+        Only deletes from Zabbix when the target adapter is ZabbixRemoteAdapter.
         """
+        if not _is_zabbix_target(self.adapter):
+            self.adapter.job.logger.info("Zabbix->Nautobot: would delete Nautobot device '%s' (not yet implemented).", self.name)
+            return super().delete()
+
         from nautobot_ssot_zabbix.utils.zabbix import get_zabbix_client_from_config
 
         client = get_zabbix_client_from_config()
