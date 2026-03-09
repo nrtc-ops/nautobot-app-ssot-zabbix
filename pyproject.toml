@@ -1,5 +1,5 @@
 [project]
-name = "nautobot-app-ssot-zabbix"
+name = "nautobot-ssot-zabbix"
 version = "0.1.0"
 description = "Nautobot SSOT App for Zabbix integration — automatically registers and syncs hosts from Nautobot into Zabbix."
 readme = "README.md"

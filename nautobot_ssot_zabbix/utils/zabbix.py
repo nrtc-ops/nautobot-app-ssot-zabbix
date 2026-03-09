@@ -3,7 +3,7 @@
 import logging
 from typing import Optional
 
-from zabbix_utils import ZabbixAPI, ZabbixAPIException
+from zabbix_utils import APIRequestError, ZabbixAPI
 
 logger = logging.getLogger("nautobot.jobs")
 
@@ -45,7 +45,7 @@ class ZabbixClient:
             self._api = ZabbixAPI(url=self._url, validate_certs=self._ssl_verify)
             self._api.login(token=self._token)
             logger.debug("Connected to Zabbix API at %s (version %s)", self._url, self._api.api_version())
-        except ZabbixAPIException as exc:
+        except APIRequestError as exc:
             raise ZabbixClientError(f"Failed to authenticate with Zabbix at {self._url}: {exc}") from exc
 
     def disconnect(self) -> None:
@@ -53,7 +53,7 @@ class ZabbixClient:
         if self._api:
             try:
                 self._api.logout()
-            except ZabbixAPIException:
+            except APIRequestError:
                 pass
             self._api = None
 
@@ -179,7 +179,7 @@ class ZabbixClient:
                 hostid = result["hostids"][0]
                 logger.info("Created Zabbix host '%s' (id=%s)", hostname, hostid)
                 return {"action": "created", "hostid": hostid}
-            except ZabbixAPIException as exc:
+            except APIRequestError as exc:
                 raise ZabbixClientError(f"Failed to create Zabbix host '{hostname}': {exc}") from exc
         else:
             hostid = existing["hostid"]
@@ -189,7 +189,7 @@ class ZabbixClient:
                 self.api.host.update(**host_params)
                 logger.info("Updated Zabbix host '%s' (id=%s)", hostname, hostid)
                 return {"action": "updated", "hostid": hostid}
-            except ZabbixAPIException as exc:
+            except APIRequestError as exc:
                 raise ZabbixClientError(
                     f"Failed to update Zabbix host '{hostname}' (id={hostid}): {exc}"
                 ) from exc
@@ -227,7 +227,7 @@ class ZabbixClient:
             self.api.host.delete(hostid)
             logger.info("Deleted Zabbix host '%s' (id=%s)", hostname, hostid)
             return {"action": "deleted", "hostid": hostid}
-        except ZabbixAPIException as exc:
+        except APIRequestError as exc:
             raise ZabbixClientError(
                 f"Failed to delete Zabbix host '{hostname}' (id={hostid}): {exc}"
             ) from exc
