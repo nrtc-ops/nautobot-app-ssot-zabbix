@@ -1,15 +1,15 @@
 [project]
-name = "nautobot-app-ssot-zabbix"
+name = "nautobot-ssot-zabbix"
 version = "0.1.0"
 description = "Nautobot SSOT App for Zabbix integration — automatically registers and syncs hosts from Nautobot into Zabbix."
 readme = "README.md"
 authors = [{ name = "NRTC DSO", email = "devsecops@nrtc.coop" }]
 license = { text = "Apache-2.0" }
-requires-python = ">=3.10,<3.14"
+requires-python = ">=3.10,<3.13"
 keywords = ["nautobot", "zabbix", "monitoring", "network-automation"]
 
 [tool.poetry]
-name = "nautobot-app-ssot-zabbix"
+name = "nautobot-ssot-zabbix"
 description = "Nautobot SSoT integration for Zabbix monitoring synchronization"
 authors = ["NRTC <noc@nrtc.coop>"]
 readme = "README.md"
@@ -24,7 +24,6 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3.13",
 ]
 packages = [
     { include = "nautobot_ssot_zabbix" },
@@ -35,9 +34,9 @@ include = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.10,<3.14"
+python = ">=3.10,<3.13"
 # Used for local development
-nautobot = ">=3.0.0,<4.0.0"
+nautobot = {version = "3.0.0", python = "3.10"}
 nautobot-ssot = "^4.0.0"
 zabbix-utils = ">=2.0.0"
 

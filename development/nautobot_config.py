@@ -121,7 +121,7 @@ if not _TESTING:
 # Enable installed Apps. Add the name of each App to the list.
 PLUGINS = [
     "nautobot_ssot",
-    "nautobot_app_ssot_zabbix",
+    "nautobot_ssot_zabbix",
 ]
 
 # Apps configuration settings. These settings are used by various Apps that the user may have installed.
@@ -130,7 +130,7 @@ PLUGINS_CONFIG = {
     "nautobot_ssot": {
         "hide_example_jobs": True,
     },
-    "nautobot_app_ssot_zabbix": {
+    "nautobot_ssot_zabbix": {
         # Required — set via environment variables in creds.env
         "zabbix_url": os.environ.get("ZABBIX_URL", "https://zabbix.nrtc.coop"),
         "zabbix_token": os.environ.get("ZABBIX_API_TOKEN", ""),
