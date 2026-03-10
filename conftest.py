@@ -1,7 +1,7 @@
 """Pytest conftest — mock out heavy Nautobot/Django dependencies for unit tests."""
 
+import importlib.metadata
 import sys
-from types import ModuleType
 from unittest.mock import MagicMock
 
 # ---- Pre-mock Django and Nautobot so our package can be imported ----
@@ -45,8 +45,6 @@ nautobot_jobs.BooleanVar = MagicMock
 nautobot_jobs.register_jobs = MagicMock()
 
 # Mock importlib.metadata.version to return a fake version
-import importlib.metadata
-
 _original_version = importlib.metadata.version
 
 
