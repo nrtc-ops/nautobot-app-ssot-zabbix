@@ -117,7 +117,7 @@ description = "Timeout context manager for asyncio programs"
 optional = false
 python-versions = ">=3.8"
 groups = ["main"]
-markers = "python_full_version < \"3.11.3\""
+markers = "python_version == \"3.10\""
 files = [
     {file = "async_timeout-5.0.1-py3-none-any.whl", hash = "sha256:39e3809566ff85354557ec2398b55e096c8364bacac9405a7a1fa429e77fe76c"},
     {file = "async_timeout-5.0.1.tar.gz", hash = "sha256:d9321a7a3d5a6a5e187e824d2fa0793ce379a202935782d555d6e9d2735677d3"},
@@ -169,7 +169,7 @@ description = "Distributed Task Queue."
 optional = false
 python-versions = ">=3.8"
 groups = ["main"]
-markers = "python_version == \"3.10\""
+markers = "python_version >= \"3.12\""
 files = [
     {file = "celery-5.5.3-py3-none-any.whl", hash = "sha256:0b5761a07057acee94694464ca482416b959568904c9dfa41ce8413a7d65d525"},
     {file = "celery-5.5.3.tar.gz", hash = "sha256:6c972ae7968c2b5281227f01c3a3f984037d21c5129d07bf3550cc2afc6b10a5"},
@@ -227,7 +227,7 @@ description = "Distributed Task Queue."
 optional = false
 python-versions = ">=3.9"
 groups = ["main"]
-markers = "python_version >= \"3.11\""
+markers = "python_version < \"3.12\""
 files = [
     {file = "celery-5.6.2-py3-none-any.whl", hash = "sha256:3ffafacbe056951b629c7abcf9064c4a2366de0bdfc9fdba421b97ebb68619a5"},
     {file = "celery-5.6.2.tar.gz", hash = "sha256:4a8921c3fcf2ad76317d3b29020772103581ed2454c4c042cc55dcc43585009b"},
@@ -239,6 +239,7 @@ click = ">=8.1.2,<9.0"
 click-didyoumean = ">=0.3.0"
 click-plugins = ">=1.1.1"
 click-repl = ">=0.2.0"
+exceptiongroup = {version = ">=1.3.0", markers = "python_version < \"3.11\""}
 kombu = ">=5.6.0"
 python-dateutil = ">=2.8.2"
 tzlocal = "*"
@@ -1172,7 +1173,7 @@ description = "Table/data-grid framework for Django"
 optional = false
 python-versions = ">=3.9"
 groups = ["main"]
-markers = "python_version == \"3.10\""
+markers = "python_version >= \"3.12\""
 files = [
     {file = "django_tables2-2.7.5-py3-none-any.whl", hash = "sha256:d9338937797207ffb6f481be2125c5ec3a0bb1858d409c672cc25fc5d654cb22"},
     {file = "django_tables2-2.7.5.tar.gz", hash = "sha256:fb5dcaa09379cf3947598ec7e1bd5f26ed63aafdee3b23963446763bbeac37bf"},
@@ -1191,7 +1192,7 @@ description = "Table/data-grid framework for Django"
 optional = false
 python-versions = ">=3.9"
 groups = ["main"]
-markers = "python_version >= \"3.11\""
+markers = "python_version < \"3.12\""
 files = [
     {file = "django_tables2-2.8.0-py3-none-any.whl", hash = "sha256:860633b0f448216af73fca6005c7e38dc9b46931dc36c08a9281a71ee250b1ee"},
     {file = "django_tables2-2.8.0.tar.gz", hash = "sha256:0dea3401bb99a0164ba09e20d59a7d90856fdc05e5ae2da9a14d0fa14d99257c"},
@@ -1225,7 +1226,7 @@ description = "A Django app providing DB, form, and REST framework fields for zo
 optional = false
 python-versions = "<4.0,>=3.8"
 groups = ["main"]
-markers = "python_version == \"3.10\""
+markers = "python_version >= \"3.12\""
 files = [
     {file = "django_timezone_field-7.1-py3-none-any.whl", hash = "sha256:93914713ed882f5bccda080eda388f7006349f25930b6122e9b07bf8db49c4b4"},
     {file = "django_timezone_field-7.1.tar.gz", hash = "sha256:b3ef409d88a2718b566fabe10ea996f2838bc72b22d3a2900c0aa905c761380c"},
@@ -1241,7 +1242,7 @@ description = "A Django app providing DB, form, and REST framework fields for zo
 optional = false
 python-versions = "<4.0,>=3.8"
 groups = ["main"]
-markers = "python_version >= \"3.11\""
+markers = "python_version < \"3.12\""
 files = [
     {file = "django_timezone_field-7.2.1-py3-none-any.whl", hash = "sha256:276915b72c5816f57c3baf9e43f816c695ef940d1b21f91ebf6203c09bf4ad44"},
     {file = "django_timezone_field-7.2.1.tar.gz", hash = "sha256:def846f9e7200b7b8f2a28fcce2b78fb2d470f6a9f272b07c4e014f6ba4c6d2e"},
@@ -1257,7 +1258,7 @@ description = "Tree queries with explicit opt-in, without configurability"
 optional = false
 python-versions = ">=3.8"
 groups = ["main"]
-markers = "python_version == \"3.10\""
+markers = "python_version >= \"3.12\""
 files = [
     {file = "django_tree_queries-0.21.2-py3-none-any.whl", hash = "sha256:360dbe024535d34b6d15db0cf566d0f3a6c31019ee9d229b59c0dfbe91b5b72d"},
     {file = "django_tree_queries-0.21.2.tar.gz", hash = "sha256:7b574bf64bc4950c8f7dba953fc028fdca05dd9bfe8422a20aed9899dd1a8890"},
@@ -1274,7 +1275,7 @@ description = "Tree queries with explicit opt-in, without configurability"
 optional = false
 python-versions = ">=3.8"
 groups = ["main"]
-markers = "python_version >= \"3.11\""
+markers = "python_version < \"3.12\""
 files = [
     {file = "django_tree_queries-0.23.1-py3-none-any.whl", hash = "sha256:5b77c82bfbc57a613bad1e58be7eca4b4a22aa9b20e2571262687429de5d164d"},
     {file = "django_tree_queries-0.23.1.tar.gz", hash = "sha256:9e7a4954b6e044cf6bdaa03e8e19088f031defe6f4f5896c9eaf7e109ca189c0"},
@@ -1394,7 +1395,7 @@ version = "1.3.1"
 description = "Backport of PEP 654 (exception groups)"
 optional = false
 python-versions = ">=3.7"
-groups = ["dev"]
+groups = ["main", "dev"]
 markers = "python_version == \"3.10\""
 files = [
     {file = "exceptiongroup-1.3.1-py3-none-any.whl", hash = "sha256:a7a39a3bd276781e98394987d3a5701d0c4edffb633bb7a5144577f82c773598"},
@@ -1755,7 +1756,7 @@ description = "IPython: Productive Interactive Computing"
 optional = false
 python-versions = ">=3.12"
 groups = ["dev"]
-markers = "python_version == \"3.12\""
+markers = "python_version >= \"3.12\""
 files = [
     {file = "ipython-9.11.0-py3-none-any.whl", hash = "sha256:6922d5bcf944c6e525a76a0a304451b60a2b6f875e86656d8bc2dfda5d710e19"},
     {file = "ipython-9.11.0.tar.gz", hash = "sha256:2a94bc4406b22ecc7e4cb95b98450f3ea493a76bec8896cda11b78d7752a6667"},
@@ -1894,7 +1895,7 @@ description = "Messaging library for Python."
 optional = false
 python-versions = ">=3.8"
 groups = ["main"]
-markers = "python_version == \"3.10\""
+markers = "python_version >= \"3.12\""
 files = [
     {file = "kombu-5.5.4-py3-none-any.whl", hash = "sha256:a12ed0557c238897d8e518f1d1fdf84bd1516c5e305af2dacd85c2015115feb8"},
     {file = "kombu-5.5.4.tar.gz", hash = "sha256:886600168275ebeada93b888e831352fe578168342f0d1d5833d88ba0d847363"},
@@ -1931,7 +1932,7 @@ description = "Messaging library for Python."
 optional = false
 python-versions = ">=3.9"
 groups = ["main"]
-markers = "python_version >= \"3.11\""
+markers = "python_version < \"3.12\""
 files = [
     {file = "kombu-5.6.2-py3-none-any.whl", hash = "sha256:efcfc559da324d41d61ca311b0c64965ea35b4c55cc04ee36e55386145dace93"},
     {file = "kombu-5.6.2.tar.gz", hash = "sha256:8060497058066c6f5aed7c26d7cd0d3b574990b09de842a8c5aaed0b92cc5a55"},
@@ -2318,7 +2319,7 @@ description = "Source of truth and network automation platform."
 optional = false
 python-versions = "<3.14,>=3.10"
 groups = ["main"]
-markers = "python_version == \"3.10\""
+markers = "python_version >= \"3.12\""
 files = [
     {file = "nautobot-3.0.0-py3-none-any.whl", hash = "sha256:8c75b03563b793c1e626ba08d9c74b21e93b3168af13e2ca742781c6e7ffe641"},
     {file = "nautobot-3.0.0.tar.gz", hash = "sha256:c159e66c09b3ed5d34927641da97066214fbb782b0adf0638ccd6f3f6d5d1667"},
@@ -2385,7 +2386,7 @@ description = "Source of truth and network automation platform."
 optional = false
 python-versions = "<3.14,>=3.10"
 groups = ["main"]
-markers = "python_version >= \"3.11\""
+markers = "python_version < \"3.12\""
 files = [
     {file = "nautobot-3.0.8-py3-none-any.whl", hash = "sha256:a01fa26417ddc5c62218667154c37ce29b12c79619efea23dd533e6abc191659"},
     {file = "nautobot-3.0.8.tar.gz", hash = "sha256:f2869e2d733b47dd186ba8f3df3cef26cdbbb82f56081add02205e75b938cc47"},
@@ -2649,7 +2650,7 @@ description = "Python Imaging Library (fork)"
 optional = false
 python-versions = ">=3.10"
 groups = ["main"]
-markers = "python_version == \"3.10\""
+markers = "python_version >= \"3.12\""
 files = [
     {file = "pillow-12.0.0-cp310-cp310-macosx_10_10_x86_64.whl", hash = "sha256:3adfb466bbc544b926d50fe8f4a4e6abd8c6bffd28a26177594e6e9b2b76572b"},
     {file = "pillow-12.0.0-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:1ac11e8ea4f611c3c0147424eae514028b5e9077dd99ab91e1bd7bc33ff145e1"},
@@ -2759,7 +2760,7 @@ description = "Python Imaging Library (fork)"
 optional = false
 python-versions = ">=3.10"
 groups = ["main"]
-markers = "python_version >= \"3.11\""
+markers = "python_version < \"3.12\""
 files = [
     {file = "pillow-12.1.1-cp310-cp310-macosx_10_10_x86_64.whl", hash = "sha256:1f1625b72740fdda5d77b4def688eb8fd6490975d06b909fd19f13f391e077e0"},
     {file = "pillow-12.1.1-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:178aa072084bd88ec759052feca8e56cbb14a60b39322b99a049e58090479713"},
@@ -4538,7 +4539,7 @@ description = "tzinfo object for the local timezone"
 optional = false
 python-versions = ">=3.9"
 groups = ["main"]
-markers = "python_version >= \"3.11\""
+markers = "python_version < \"3.12\""
 files = [
     {file = "tzlocal-5.3.1-py3-none-any.whl", hash = "sha256:eb1a66c3ef5847adf7a834f1be0800581b683b5608e74f86ecbcef8ab91bb85d"},
     {file = "tzlocal-5.3.1.tar.gz", hash = "sha256:cceffc7edecefea1f595541dbd6e990cb1ea3d19bf01b2809f362a03dd7921fd"},
@@ -4703,5 +4704,5 @@ all = []
 
 [metadata]
 lock-version = "2.1"
-python-versions = ">=3.10,<3.13"
-content-hash = "b1b55cc91488f34d6ccb0c99796cd29b3668387dd11c2db41f079992b09f7656"
+python-versions = ">=3.10,<3.14"
+content-hash = "102d8ee187afc2d4ab834c158dea7b465fd1772e3011a63ba2f3c79a4b8433f2"
