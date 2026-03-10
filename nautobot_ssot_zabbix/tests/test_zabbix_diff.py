@@ -5,7 +5,7 @@ from diffsync.enum import DiffSyncActions
 from nautobot_ssot_zabbix.diff import CustomOrderingDiff
 
 
-class TestCustomOrderingDiff:
+class TestCustomOrderingDiff:  # pylint: disable=too-few-public-methods
     """Verify that deletions are deferred to run last."""
 
     def test_creates_before_deletes(self):
