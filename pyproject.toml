@@ -1,5 +1,5 @@
 [project]
-name = "nautobot-ssot-zabbix"
+name = "nautobot-app-ssot-zabbix"
 version = "0.1.0"
 description = "Nautobot SSOT App for Zabbix integration — automatically registers and syncs hosts from Nautobot into Zabbix."
 readme = "README.md"
@@ -9,7 +9,7 @@ requires-python = ">=3.10,<3.14"
 keywords = ["nautobot", "zabbix", "monitoring", "network-automation"]
 
 [tool.poetry]
-name = "nautobot-ssot-zabbix"
+name = "nautobot-app-ssot-zabbix"
 description = "Nautobot SSoT integration for Zabbix monitoring synchronization"
 authors = ["NRTC <noc@nrtc.coop>"]
 readme = "README.md"
