@@ -1,7 +1,8 @@
 """Jobs for Zabbix SSoT integration."""
 
+from django.conf import settings
 from nautobot.apps.jobs import BooleanVar, register_jobs
-from nautobot_ssot.jobs.base import DataSource, DataTarget
+from nautobot_ssot.jobs.base import DataMapping, DataSource, DataTarget
 
 from nautobot_ssot_zabbix.diff import CustomOrderingDiff
 from nautobot_ssot_zabbix.diffsync.adapters import ZabbixNautobotAdapter, ZabbixRemoteAdapter
@@ -19,7 +20,7 @@ class ZabbixDataSource(DataSource):
 
     debug = BooleanVar(description="Enable verbose debug logging.", default=False)
 
-    class Meta:
+    class Meta:  # pylint: disable=too-few-public-methods
         """SSoT Job metadata for Zabbix DataSource."""
 
         name = "Zabbix to Nautobot"
@@ -30,8 +31,6 @@ class ZabbixDataSource(DataSource):
     @classmethod
     def config_information(cls):
         """Return user-facing configuration information shown in the SSoT dashboard."""
-        from django.conf import settings
-
         cfg = settings.PLUGINS_CONFIG.get("nautobot_ssot_zabbix", {})
         return {
             "Zabbix URL": cfg.get("zabbix_url", "(not configured)"),
@@ -43,8 +42,6 @@ class ZabbixDataSource(DataSource):
     @classmethod
     def data_mappings(cls):
         """Describe the data mappings for the SSoT dashboard."""
-        from nautobot_ssot.jobs.base import DataMapping
-
         return (DataMapping("Zabbix Host", None, "Nautobot Device", None),)
 
     def load_source_adapter(self):
@@ -77,7 +74,7 @@ class ZabbixDataTarget(DataTarget):
 
     debug = BooleanVar(description="Enable verbose debug logging.", default=False)
 
-    class Meta:
+    class Meta:  # pylint: disable=too-few-public-methods
         """SSoT Job metadata for Zabbix DataTarget."""
 
         name = "Nautobot to Zabbix"
@@ -92,8 +89,6 @@ class ZabbixDataTarget(DataTarget):
     @classmethod
     def config_information(cls):
         """Return user-facing configuration information shown in the SSoT dashboard."""
-        from django.conf import settings
-
         cfg = settings.PLUGINS_CONFIG.get("nautobot_ssot_zabbix", {})
         return {
             "Zabbix URL": cfg.get("zabbix_url", "(not configured)"),
@@ -107,8 +102,6 @@ class ZabbixDataTarget(DataTarget):
     @classmethod
     def data_mappings(cls):
         """Describe the data mappings for the SSoT dashboard."""
-        from nautobot_ssot.jobs.base import DataMapping
-
         return (DataMapping("Nautobot Device", None, "Zabbix Host", None),)
 
     def load_source_adapter(self):

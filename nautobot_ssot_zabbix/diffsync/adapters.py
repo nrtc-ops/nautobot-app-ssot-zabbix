@@ -9,6 +9,7 @@ Two adapters bridge the gap between Nautobot and Zabbix:
 import logging
 
 from diffsync import Adapter
+from nautobot.dcim.models import Device
 from nautobot_ssot.contrib import NautobotAdapter
 
 from nautobot_ssot_zabbix.diffsync.models import ZabbixHost
@@ -30,6 +31,7 @@ class ZabbixRemoteAdapter(Adapter):
     in a Zabbix → Nautobot (DataSource) sync.
     """
 
+    IS_ZABBIX_REMOTE = True
     host = ZabbixHost
     top_level = ["host"]
 
@@ -92,7 +94,7 @@ class ZabbixRemoteAdapter(Adapter):
 
             try:
                 self.add(zabbix_host)
-            except Exception as exc:  # noqa: BLE001
+            except Exception as exc:  # noqa: BLE001  # pylint: disable=broad-exception-caught
                 self.job.logger.warning("Could not load Zabbix host '%s': %s", hostname, exc)
 
 
@@ -125,8 +127,6 @@ class ZabbixNautobotAdapter(NautobotAdapter):
         - Have no primary IP (can't be monitored)
         - Are not in an active/staged status
         """
-        from nautobot.dcim.models import Device
-
         active_statuses = {"Active", "Staged"}
 
         qs = Device.objects.filter(status__name__in=active_statuses).select_related(
@@ -164,5 +164,5 @@ class ZabbixNautobotAdapter(NautobotAdapter):
 
             try:
                 self.add(nautobot_host)
-            except Exception as exc:  # noqa: BLE001
+            except Exception as exc:  # noqa: BLE001  # pylint: disable=broad-exception-caught
                 self.job.logger.warning("Could not load Nautobot device '%s': %s", device.name, exc)

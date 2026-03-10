@@ -10,14 +10,18 @@ from typing import ClassVar, Optional
 
 from diffsync import DiffSyncModel
 
+from nautobot_ssot_zabbix.utils.zabbix import get_zabbix_client_from_config
+
 logger = logging.getLogger("nautobot.jobs")
 
 
 def _is_zabbix_target(adapter) -> bool:
-    """Return True if the adapter is the Zabbix remote adapter (i.e. we should write to Zabbix)."""
-    from nautobot_ssot_zabbix.diffsync.adapters import ZabbixRemoteAdapter
+    """Return True if the adapter is the Zabbix remote adapter (i.e. we should write to Zabbix).
 
-    return isinstance(adapter, ZabbixRemoteAdapter)
+    Checks for the IS_ZABBIX_REMOTE marker attribute on the adapter class to avoid a
+    circular import between adapters and models.
+    """
+    return bool(getattr(adapter, "IS_ZABBIX_REMOTE", False))
 
 
 class ZabbixHost(DiffSyncModel):
@@ -74,8 +78,6 @@ class ZabbixHost(DiffSyncModel):
             )
             return super().create(adapter, ids, attrs)
 
-        from nautobot_ssot_zabbix.utils.zabbix import get_zabbix_client_from_config
-
         ip = attrs.get("ip_address")
         if not ip:
             adapter.job.logger.warning("Skipping create for '%s' — no IP address.", hostname)
@@ -118,8 +120,6 @@ class ZabbixHost(DiffSyncModel):
                 "Zabbix->Nautobot: would update Nautobot device '%s' (not yet implemented).", self.name
             )
             return super().update(attrs)
-
-        from nautobot_ssot_zabbix.utils.zabbix import get_zabbix_client_from_config
 
         hostname = self.name
         ip = attrs.get("ip_address", self.ip_address)
@@ -165,8 +165,6 @@ class ZabbixHost(DiffSyncModel):
                 "Zabbix->Nautobot: would delete Nautobot device '%s' (not yet implemented).", self.name
             )
             return super().delete()
-
-        from nautobot_ssot_zabbix.utils.zabbix import get_zabbix_client_from_config
 
         client = get_zabbix_client_from_config()
         with client:

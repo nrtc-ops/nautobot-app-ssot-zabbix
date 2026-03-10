@@ -3,6 +3,7 @@
 import logging
 from typing import Optional
 
+from django.conf import settings
 from zabbix_utils import APIRequestError, ZabbixAPI
 
 logger = logging.getLogger("nautobot.jobs")
@@ -103,7 +104,7 @@ class ZabbixClient:
         )
         return results[0] if results else None
 
-    def build_interface(
+    def build_interface(  # pylint: disable=too-many-arguments
         self,
         ip: str,
         dns: str = "",
@@ -129,7 +130,7 @@ class ZabbixClient:
                 interface["details"]["community"] = snmp_community
         return interface
 
-    def upsert_host(
+    def upsert_host(  # pylint: disable=too-many-arguments,too-many-locals
         self,
         hostname: str,
         visible_name: str,
@@ -254,8 +255,6 @@ def get_zabbix_client_from_config() -> ZabbixClient:
     Raises:
         ZabbixClientError: If required config keys are missing
     """
-    from django.conf import settings
-
     cfg = settings.PLUGINS_CONFIG.get("nautobot_ssot_zabbix", {})
     url = cfg.get("zabbix_url")
     token = cfg.get("zabbix_token")

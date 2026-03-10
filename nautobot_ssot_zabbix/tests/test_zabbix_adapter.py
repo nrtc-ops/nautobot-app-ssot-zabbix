@@ -2,13 +2,16 @@
 
 from unittest.mock import MagicMock, patch
 
+from diffsync import Adapter
+
+from nautobot_ssot_zabbix.diffsync.adapters import ZabbixRemoteAdapter
+from nautobot_ssot_zabbix.diffsync.models import ZabbixHost
+
 
 class TestZabbixRemoteAdapterLoad:
     """Tests for ZabbixRemoteAdapter.load()."""
 
     def _make_adapter(self, managed_only=False):
-        from nautobot_ssot_zabbix.diffsync.adapters import ZabbixRemoteAdapter
-
         job = MagicMock()
         job.logger = MagicMock()
         return ZabbixRemoteAdapter(job=job, sync=None, managed_only=managed_only)
@@ -60,7 +63,7 @@ class TestZabbixRemoteAdapterLoad:
         adapter = self._make_adapter()
         adapter.load()
 
-        assert list(adapter.get_all("host")) == []
+        assert not any(adapter.get_all("host"))
 
     @patch("nautobot_ssot_zabbix.diffsync.adapters.get_zabbix_client_from_config")
     def test_load_managed_only_passes_flag(self, mock_get_client):
@@ -113,8 +116,6 @@ class TestZabbixHostModel:
 
     def _make_zabbix_adapter(self):
         """Create a mock that passes the _is_zabbix_target() check."""
-        from nautobot_ssot_zabbix.diffsync.adapters import ZabbixRemoteAdapter
-
         adapter = MagicMock(spec=ZabbixRemoteAdapter)
         adapter.job = MagicMock()
         adapter.job.logger = MagicMock()
@@ -122,8 +123,6 @@ class TestZabbixHostModel:
 
     def _make_nautobot_adapter(self):
         """Create a mock that does NOT pass the _is_zabbix_target() check."""
-        from diffsync import Adapter
-
         adapter = MagicMock(spec=Adapter)
         adapter.job = MagicMock()
         adapter.job.logger = MagicMock()
@@ -131,10 +130,8 @@ class TestZabbixHostModel:
 
     # --- Nautobot -> Zabbix direction (writes to Zabbix) ---
 
-    @patch("nautobot_ssot_zabbix.utils.zabbix.get_zabbix_client_from_config")
+    @patch("nautobot_ssot_zabbix.diffsync.models.get_zabbix_client_from_config")
     def test_create_calls_upsert_when_target_is_zabbix(self, mock_get_client):
-        from nautobot_ssot_zabbix.diffsync.models import ZabbixHost
-
         mock_client = MagicMock()
         mock_client.__enter__ = lambda s: s
         mock_client.__exit__ = MagicMock(return_value=False)
@@ -164,10 +161,8 @@ class TestZabbixHostModel:
         assert call_kwargs["hostname"] == "test-router-01"
         assert call_kwargs["ip"] == "10.0.0.1"
 
-    @patch("nautobot_ssot_zabbix.utils.zabbix.get_zabbix_client_from_config")
+    @patch("nautobot_ssot_zabbix.diffsync.models.get_zabbix_client_from_config")
     def test_create_skips_no_ip(self, mock_get_client):
-        from nautobot_ssot_zabbix.diffsync.models import ZabbixHost
-
         adapter = self._make_zabbix_adapter()
 
         result = ZabbixHost.create(
@@ -186,10 +181,8 @@ class TestZabbixHostModel:
         assert result is None
         mock_get_client.assert_not_called()
 
-    @patch("nautobot_ssot_zabbix.utils.zabbix.get_zabbix_client_from_config")
+    @patch("nautobot_ssot_zabbix.diffsync.models.get_zabbix_client_from_config")
     def test_update_calls_upsert_when_target_is_zabbix(self, mock_get_client):
-        from nautobot_ssot_zabbix.diffsync.models import ZabbixHost
-
         mock_client = MagicMock()
         mock_client.__enter__ = lambda s: s
         mock_client.__exit__ = MagicMock(return_value=False)
@@ -207,10 +200,8 @@ class TestZabbixHostModel:
         call_kwargs = mock_client.upsert_host.call_args[1]
         assert call_kwargs["ip"] == "10.0.0.2"
 
-    @patch("nautobot_ssot_zabbix.utils.zabbix.get_zabbix_client_from_config")
+    @patch("nautobot_ssot_zabbix.diffsync.models.get_zabbix_client_from_config")
     def test_delete_calls_delete_host_when_target_is_zabbix(self, mock_get_client):
-        from nautobot_ssot_zabbix.diffsync.models import ZabbixHost
-
         mock_client = MagicMock()
         mock_client.__enter__ = lambda s: s
         mock_client.__exit__ = MagicMock(return_value=False)
@@ -227,10 +218,8 @@ class TestZabbixHostModel:
 
     # --- Zabbix -> Nautobot direction (should NOT write to Zabbix) ---
 
-    @patch("nautobot_ssot_zabbix.utils.zabbix.get_zabbix_client_from_config")
+    @patch("nautobot_ssot_zabbix.diffsync.models.get_zabbix_client_from_config")
     def test_create_does_not_call_zabbix_when_target_is_nautobot(self, mock_get_client):
-        from nautobot_ssot_zabbix.diffsync.models import ZabbixHost
-
         adapter = self._make_nautobot_adapter()
 
         result = ZabbixHost.create(
@@ -250,10 +239,8 @@ class TestZabbixHostModel:
         mock_get_client.assert_not_called()
         adapter.job.logger.info.assert_called()
 
-    @patch("nautobot_ssot_zabbix.utils.zabbix.get_zabbix_client_from_config")
+    @patch("nautobot_ssot_zabbix.diffsync.models.get_zabbix_client_from_config")
     def test_update_does_not_call_zabbix_when_target_is_nautobot(self, mock_get_client):
-        from nautobot_ssot_zabbix.diffsync.models import ZabbixHost
-
         host = ZabbixHost(name="zabbix-host-01", ip_address="10.0.0.5")
         host.adapter = self._make_nautobot_adapter()
 
@@ -263,10 +250,8 @@ class TestZabbixHostModel:
         mock_get_client.assert_not_called()
         host.adapter.job.logger.info.assert_called()
 
-    @patch("nautobot_ssot_zabbix.utils.zabbix.get_zabbix_client_from_config")
+    @patch("nautobot_ssot_zabbix.diffsync.models.get_zabbix_client_from_config")
     def test_delete_does_not_call_zabbix_when_target_is_nautobot(self, mock_get_client):
-        from nautobot_ssot_zabbix.diffsync.models import ZabbixHost
-
         host = ZabbixHost(name="zabbix-host-01")
         host.adapter = self._make_nautobot_adapter()
 
