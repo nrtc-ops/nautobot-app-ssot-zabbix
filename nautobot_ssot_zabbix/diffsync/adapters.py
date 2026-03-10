@@ -129,18 +129,15 @@ class ZabbixNautobotAdapter(NautobotAdapter):
 
         active_statuses = {"Active", "Staged"}
 
-        qs = (
-            Device.objects.filter(status__name__in=active_statuses)
-            .select_related(
-                "location",
-                "role",
-                "device_type",
-                "tenant",
-                "platform",
-                "primary_ip4",
-                "primary_ip6",
-                "status",
-            )
+        qs = Device.objects.filter(status__name__in=active_statuses).select_related(
+            "location",
+            "role",
+            "device_type",
+            "tenant",
+            "platform",
+            "primary_ip4",
+            "primary_ip6",
+            "status",
         )
 
         self.job.logger.info("Loading %d active Nautobot devices.", qs.count())
@@ -148,9 +145,7 @@ class ZabbixNautobotAdapter(NautobotAdapter):
         for device in qs:
             ip = get_primary_ip(device)
             if not ip:
-                self.job.logger.debug(
-                    "Skipping '%s' — no primary IP assigned.", device.name
-                )
+                self.job.logger.debug("Skipping '%s' — no primary IP assigned.", device.name)
                 continue
 
             nautobot_host = ZabbixHost(
@@ -170,6 +165,4 @@ class ZabbixNautobotAdapter(NautobotAdapter):
             try:
                 self.add(nautobot_host)
             except Exception as exc:  # noqa: BLE001
-                self.job.logger.warning(
-                    "Could not load Nautobot device '%s': %s", device.name, exc
-                )
+                self.job.logger.warning("Could not load Nautobot device '%s': %s", device.name, exc)

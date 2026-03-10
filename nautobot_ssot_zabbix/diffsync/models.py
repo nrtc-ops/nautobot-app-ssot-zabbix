@@ -69,7 +69,9 @@ class ZabbixHost(DiffSyncModel):
         hostname = ids["name"]
 
         if not _is_zabbix_target(adapter):
-            adapter.job.logger.info("Zabbix->Nautobot: would create Nautobot device '%s' (not yet implemented).", hostname)
+            adapter.job.logger.info(
+                "Zabbix->Nautobot: would create Nautobot device '%s' (not yet implemented).", hostname
+            )
             return super().create(adapter, ids, attrs)
 
         from nautobot_ssot_zabbix.utils.zabbix import get_zabbix_client_from_config
@@ -112,7 +114,9 @@ class ZabbixHost(DiffSyncModel):
         Only writes to Zabbix when the target adapter is ZabbixRemoteAdapter.
         """
         if not _is_zabbix_target(self.adapter):
-            self.adapter.job.logger.info("Zabbix->Nautobot: would update Nautobot device '%s' (not yet implemented).", self.name)
+            self.adapter.job.logger.info(
+                "Zabbix->Nautobot: would update Nautobot device '%s' (not yet implemented).", self.name
+            )
             return super().update(attrs)
 
         from nautobot_ssot_zabbix.utils.zabbix import get_zabbix_client_from_config
@@ -125,9 +129,7 @@ class ZabbixHost(DiffSyncModel):
 
         client = get_zabbix_client_from_config()
         with client:
-            groupid = client.get_or_create_hostgroup(
-                attrs.get("hostgroup", self.hostgroup)
-            )
+            groupid = client.get_or_create_hostgroup(attrs.get("hostgroup", self.hostgroup))
             templateids = []
             template_name = attrs.get("template", self.template)
             if template_name:
@@ -159,7 +161,9 @@ class ZabbixHost(DiffSyncModel):
         Only deletes from Zabbix when the target adapter is ZabbixRemoteAdapter.
         """
         if not _is_zabbix_target(self.adapter):
-            self.adapter.job.logger.info("Zabbix->Nautobot: would delete Nautobot device '%s' (not yet implemented).", self.name)
+            self.adapter.job.logger.info(
+                "Zabbix->Nautobot: would delete Nautobot device '%s' (not yet implemented).", self.name
+            )
             return super().delete()
 
         from nautobot_ssot_zabbix.utils.zabbix import get_zabbix_client_from_config

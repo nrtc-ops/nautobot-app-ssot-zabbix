@@ -122,7 +122,9 @@ class TestZabbixHostModel:
 
     def _make_nautobot_adapter(self):
         """Create a mock that does NOT pass the _is_zabbix_target() check."""
-        adapter = MagicMock()
+        from diffsync import Adapter
+
+        adapter = MagicMock(spec=Adapter)
         adapter.job = MagicMock()
         adapter.job.logger = MagicMock()
         return adapter

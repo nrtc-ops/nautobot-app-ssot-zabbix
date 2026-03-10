@@ -25,10 +25,7 @@ class ZabbixDataSource(DataSource):
         name = "Zabbix to Nautobot"
         data_source = "Zabbix"
         data_target = "Nautobot"
-        description = (
-            "Sync Zabbix host inventory into Nautobot. "
-            "Useful for auditing drift between the two systems."
-        )
+        description = "Sync Zabbix host inventory into Nautobot. Useful for auditing drift between the two systems."
 
     @classmethod
     def config_information(cls):
@@ -48,9 +45,7 @@ class ZabbixDataSource(DataSource):
         """Describe the data mappings for the SSoT dashboard."""
         from nautobot_ssot.jobs.base import DataMapping
 
-        return (
-            DataMapping("Zabbix Host", None, "Nautobot Device", None),
-        )
+        return (DataMapping("Zabbix Host", None, "Nautobot Device", None),)
 
     def load_source_adapter(self):
         """Load hosts from Zabbix into DiffSync models."""
@@ -114,9 +109,7 @@ class ZabbixDataTarget(DataTarget):
         """Describe the data mappings for the SSoT dashboard."""
         from nautobot_ssot.jobs.base import DataMapping
 
-        return (
-            DataMapping("Nautobot Device", None, "Zabbix Host", None),
-        )
+        return (DataMapping("Nautobot Device", None, "Zabbix Host", None),)
 
     def load_source_adapter(self):
         """Load devices from Nautobot into DiffSync models."""

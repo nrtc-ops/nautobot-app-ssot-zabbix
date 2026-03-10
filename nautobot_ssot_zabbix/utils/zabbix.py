@@ -190,13 +190,9 @@ class ZabbixClient:
                 logger.info("Updated Zabbix host '%s' (id=%s)", hostname, hostid)
                 return {"action": "updated", "hostid": hostid}
             except APIRequestError as exc:
-                raise ZabbixClientError(
-                    f"Failed to update Zabbix host '{hostname}' (id={hostid}): {exc}"
-                ) from exc
+                raise ZabbixClientError(f"Failed to update Zabbix host '{hostname}' (id={hostid}): {exc}") from exc
 
-    def _reconcile_primary_interface(
-        self, hostid: str, existing_interfaces: list, desired_interfaces: list
-    ) -> None:
+    def _reconcile_primary_interface(self, hostid: str, existing_interfaces: list, desired_interfaces: list) -> None:
         """Update the primary interface IP if it has changed."""
         if not existing_interfaces or not desired_interfaces:
             return
@@ -228,9 +224,7 @@ class ZabbixClient:
             logger.info("Deleted Zabbix host '%s' (id=%s)", hostname, hostid)
             return {"action": "deleted", "hostid": hostid}
         except APIRequestError as exc:
-            raise ZabbixClientError(
-                f"Failed to delete Zabbix host '{hostname}' (id={hostid}): {exc}"
-            ) from exc
+            raise ZabbixClientError(f"Failed to delete Zabbix host '{hostname}' (id={hostid}): {exc}") from exc
 
     def get_all_hosts(self, managed_only: bool = False) -> list:
         """Return hosts from Zabbix.
@@ -267,8 +261,6 @@ def get_zabbix_client_from_config() -> ZabbixClient:
     token = cfg.get("zabbix_token")
 
     if not url or not token:
-        raise ZabbixClientError(
-            "nautobot_ssot_zabbix requires 'zabbix_url' and 'zabbix_token' in PLUGINS_CONFIG."
-        )
+        raise ZabbixClientError("nautobot_ssot_zabbix requires 'zabbix_url' and 'zabbix_token' in PLUGINS_CONFIG.")
 
     return ZabbixClient(url=url, token=token, ssl_verify=cfg.get("ssl_verify", True))
