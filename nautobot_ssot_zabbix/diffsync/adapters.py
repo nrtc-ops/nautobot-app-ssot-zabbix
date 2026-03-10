@@ -7,14 +7,12 @@ Two adapters bridge the gap between Nautobot and Zabbix:
 """
 
 import logging
-from typing import Optional
 
 from diffsync import Adapter
 from nautobot_ssot.contrib import NautobotAdapter
 
 from nautobot_ssot_zabbix.diffsync.models import ZabbixHost
 from nautobot_ssot_zabbix.utils.nautobot import (
-    build_zabbix_tags,
     get_primary_ip,
     resolve_hostgroup_name,
     resolve_template_name,
@@ -39,10 +37,12 @@ class ZabbixRemoteAdapter(Adapter):
         """Initialize the Zabbix remote adapter.
 
         Args:
+            *args: Positional arguments passed to the parent adapter.
             job: The running SSoT Job instance (provides self.job.logger)
             sync: The SSoT Sync model instance
             managed_only: If True, only load hosts tagged source=nautobot.
                           If False (default), load all Zabbix hosts.
+            **kwargs: Additional keyword arguments passed to the parent adapter.
         """
         super().__init__(*args, **kwargs)
         self.job = job
@@ -79,9 +79,6 @@ class ZabbixRemoteAdapter(Adapter):
             templates = host_data.get("parentTemplates", [])
             template = templates[0]["name"] if templates else None
 
-            # Extract nautobot_id tag if present
-            tags = host_data.get("tags", [])
-
             zabbix_host = ZabbixHost(
                 name=hostname,
                 visible_name=host_data.get("name", hostname),
@@ -114,8 +111,10 @@ class ZabbixNautobotAdapter(NautobotAdapter):
         """Initialize the Nautobot adapter.
 
         Args:
+            *args: Positional arguments passed to the parent adapter.
             job: The running SSoT Job instance
             sync: The SSoT Sync model instance
+            **kwargs: Additional keyword arguments passed to the parent adapter.
         """
         super().__init__(*args, job=job, sync=sync, **kwargs)
 
