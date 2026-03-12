@@ -1,5 +1,7 @@
 # Nautobot SSoT Zabbix
 
+> **⚠️ Alpha Software**: This project is currently in **alpha** and is under active development. APIs, configuration options, and behavior may change between releases. Use in production environments is not recommended until a stable release is published.
+
 An [SSoT](https://github.com/nautobot/nautobot-app-ssot) app for [Nautobot](https://github.com/nautobot/nautobot) that synchronizes device data between Nautobot and [Zabbix](https://www.zabbix.com/) monitoring.
 
 <p align="center">
