@@ -1044,7 +1044,7 @@ wheels = [
 
 [[package]]
 name = "nautobot-ssot-zabbix"
-version = "0.1.0"
+version = "0.1.1a0"
 source = { editable = "." }
 dependencies = [
     { name = "nautobot", marker = "python_full_version == '3.12.*'" },
