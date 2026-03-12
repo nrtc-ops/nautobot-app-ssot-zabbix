@@ -1,6 +1,6 @@
 [project]
 name = "nautobot-ssot-zabbix"
-version = "0.1.0"
+version = "0.1.1a0"
 description = "Nautobot SSOT App for Zabbix integration — automatically registers and syncs hosts from Nautobot into Zabbix."
 readme = "README.md"
 authors = [{ name = "NRTC DSO", email = "devsecops@nrtc.coop" }]
