@@ -1,3 +1,6 @@
+#Memsearch - Claude Memory Search Engine
+.memsearch/
+
 # Ansible Retry Files
 *.retry
 
@@ -308,4 +311,11 @@ invoke.yml
 public
 /compose.yaml
 /dump.sql
-/nautobot_ssot_zabbix/static/nautobot_ssot_zabbix/docs
+/nautobot_custom_tunnel_builder/static/nautobot_custom_tunnel_builder/docs
+
+# Ruff
+.ruff_cache/
+
+# Draft Plans
+**/plans/**
+docs/plans/
